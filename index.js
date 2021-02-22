@@ -7,6 +7,8 @@ const PORT = 3232;
 
 const MULTIPLIER = 1000;
 
+const trustedIps = ['192.168.0.104','ADD NEW IP'];
+
 app.use((_, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Access-Control-Allow-Methods', '*');
@@ -20,6 +22,18 @@ const fetchCoinDesk = async (startDate,endDate) => {
     return res;
 }
 
+//  Trusted Ip checker middleware
+
+app.use('/api/getPriceHistory/', (req, res, next) => {
+    let requestIP = req.ip.split(':').pop();
+    if(trustedIps.indexOf(requestIP) >= 0) {
+        next();
+    } else {
+        console.log('Call from untrusted IP : ', requestIP)
+        res.send('Unauthorized connection');
+    }
+})
+
 app.get('/api/getPriceHistory/:startDate/:endDate', (req, res) => {
 
     fetchCoinDesk(req.params.startDate, req.params.endDate).then(response => {
@@ -27,7 +41,7 @@ app.get('/api/getPriceHistory/:startDate/:endDate', (req, res) => {
         for (let index in bpi) {
             bpi[index] = Number(bpi[index] * MULTIPLIER).toFixed(1)
         }
-
+    
         res.send(JSON.stringify(bpi));
     }).catch(e => {
         console.log(e)
