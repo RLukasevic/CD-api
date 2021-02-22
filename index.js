@@ -1,5 +1,7 @@
-var express = require('express');
+const express = require('express');
 const fetch = require("node-fetch");
+let compression = require('compression')
+
 
 const app = express();
 
@@ -9,12 +11,16 @@ const MULTIPLIER = 1000;
 
 const trustedIps = ['192.168.0.104','ADD NEW IP'];
 
-app.use((_, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Methods', '*');
-	res.setHeader('Access-Control-Allow-Headers', '*');
-	next();
-});
+const shouldCompress = (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false
+    }
+  
+    return compression.filter(req, res)
+}
+
+app.use(compression({ filter: shouldCompress, threshold: 0 }))   // compression to gZip
+
 
 const fetchCoinDesk = async (startDate,endDate) => {
     const response = await fetch('https://api.coindesk.com/v1/bpi/historical/close.json?start=' + startDate + '&end=' + endDate);
