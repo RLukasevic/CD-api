@@ -1,6 +1,7 @@
 
 # Coindesk-API
-### How to run this project
+
+# `How to run this project`
 
 To run project on your localhost, follow the steps below :
 
