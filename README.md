@@ -33,7 +33,7 @@ You can now make GET requests to `http://localhost:3232/api/getPriceHistory/{rep
 
 # `Changing trusted-IPs and rate-limit`
 
-### `changing trusted IP'
+### `changing trusted IP`
 
 You can add your local IP to `trustedIps` array constant to get access to api.
 
