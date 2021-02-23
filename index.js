@@ -1,6 +1,7 @@
 const express = require('express');
 const fetch = require("node-fetch");
-let compression = require('compression')
+const rateLimit = require("express-rate-limit");
+const compression = require('compression');
 
 
 const app = express();
@@ -10,6 +11,13 @@ const PORT = 3232;
 const MULTIPLIER = 1000;
 
 const trustedIps = ['192.168.0.104','ADD NEW IP'];
+
+const rateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 
+});
+
+app.use(rateLimiter);
 
 const shouldCompress = (req, res) => {
     if (req.headers['x-no-compression']) {
