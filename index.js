@@ -17,7 +17,7 @@ const rateLimiter = rateLimit({
     max: 100 
 });
 
-app.use(rateLimiter);
+app.use('/api/getPriceHistory/', rateLimiter);
 
 const shouldCompress = (req, res) => {
     if (req.headers['x-no-compression']) {
