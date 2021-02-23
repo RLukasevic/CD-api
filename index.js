@@ -14,7 +14,8 @@ const trustedIps = ['192.168.0.104','ADD NEW IP'];
 
 const rateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 
+    max: 100,
+    message: 'Too many requests, try later'
 });
 
 app.use('/api/getPriceHistory/', rateLimiter);
